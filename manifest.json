@@ -1,0 +1,6 @@
+{
+    "namespace": "psy_minibaradditions",
+	"icon": "assets/icon.png",
+    "setup": "src/setup.mjs",
+    "load": ["src/templates.html"]
+  }

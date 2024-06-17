@@ -1,0 +1,8 @@
+<template id="psy-combat-footer-minibar-additions-btn">
+    <button v-show="enabled" class="btn btn-sm btn-light btn-combat-minibar-food position-relative" @click="gotoPage" :id="'psy-combat-minibar-btn'+ id" style="pointer-events:auto;background-color: #1e232d !important">
+        <img class="skill-icon-xs" :id="'psy-combat-minibar-img-'+ id" :src=resource>
+        <div class="font-size-sm text-white text-center">
+        <small class="badge-pill bg-primary-darker" :id="'psy-combat-minibar-' + id">{{value}}</small>
+        </div>
+    </button>
+</template>
