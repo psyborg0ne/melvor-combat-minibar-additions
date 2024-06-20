@@ -6,3 +6,9 @@
         </div>
     </button>
 </template>
+
+<template id="psy-combat-footer-minibar-additions-enemy-img">
+    <button v-show="enabled" class="btn btn-sm btn-light btn-combat-minibar-food position-relative" @click="gotoWiki" id="psy-combat-minibar-enemy-img-btn" style="pointer-events:auto;background-color: #1e232d !important">
+        <img class="skill-icon-xs" id="psy-combat-minibar-enemy-img" :src=resource>
+    </button>
+</template>

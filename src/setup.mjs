@@ -20,6 +20,14 @@ export function setup({onInterfaceReady, settings})
             resource 	: assets.getURI("assets/media/main/gp.svg"),
             title 		: "shop",
             value 		: 0
+        },
+        enemy: {
+            type 		: 'switch',
+            label 		: 'Enemy Image',
+            hint 		: 'Displays the enemy image next to the combat minibar',
+            default 	: true,
+            resource 	: assets.getURI("assets/media/bank/Monster_Hunter_Scroll.png"),
+            title 		: "enemy"
         }
     }
 
@@ -31,14 +39,17 @@ export function setup({onInterfaceReady, settings})
         const btnDiv        = psy_setupBtnContainer(minibar);
         const bankBtn       = PsyMinibarButton({id: "bank", value: 0, resource: assets.getURI("assets/media/main/bank_header.svg"), enabled: dispSettings.get("bank")});
         const shopBtn       = PsyMinibarButton({id: "shop", value: 0, resource: assets.getURI("assets/media/main/gp.svg"), enabled: dispSettings.get("shop")});
+        const enemyImg      = PsyMinibarEnemyImg({resource: assets.getURI("assets/media/bank/Monster_Hunter_Scroll.png"), enabled: dispSettings.get("enemy")});
 
         // Render components
         ui.create(bankBtn, btnDiv);
         ui.create(shopBtn, btnDiv);
+        ui.create(enemyImg, btnDiv); // TODO Get correct div
 
         // Initialize values
         bankBtn.refresh();
         shopBtn.refresh();
+        enemyImg.refresh()
 
         ctx.patch(Currency, "onAmountChange").after(function() {
             shopBtn.refresh();
@@ -58,6 +69,16 @@ export function setup({onInterfaceReady, settings})
         ctx.patch(Bank, "removeItemQuantityByID").after(function() {
             bankBtn.refresh();
         })
+
+        ctx.patch(Enemy, "renderImageAndName").after(function() {
+			if(this.state === EnemyState.Alive){
+                enemyImg.refresh();
+			}
+		})
+
+        ctx.patch(Enemy, "processDeath").before(function () {
+            enemyImg.setEmpty();
+		})
     })
 }
 
@@ -122,4 +143,43 @@ function PsyMinibarButton(props){
             this.enabled = flag;
         }
 	}
+}
+
+function PsyMinibarEnemyImg(props){
+    return{
+        $template: "#psy-combat-footer-minibar-additions-enemy-img",
+        resource: props.img,
+        enabled: props.enabled,
+        placeholder: "assets/media/bank/Monster_Hunter_Scroll.png",
+        wikiname: "",
+        refresh(){
+            try {
+                if( game.combat.selectedArea instanceof Dungeon     ||
+                    game.combat.selectedArea instanceof Stronghold){
+                    // Try Dungeon or Stronghold, both extend CombatArea
+                    this.resource = game.combat.selectedArea.media;
+                    this.wikiname = game.combat.selectedArea.wikiName;
+                }
+                else{
+                    // Fallback to CombatArea
+                    this.resource = game.combat.selectedMonster.media;
+                    this.wikiname = game.combat.selectedMonster.wikiName;
+                }
+            } catch (error) {
+                this.setEmpty();
+            }
+        },
+        setActive(flag){
+            this.enabled = flag;
+        },
+        setEmpty(){
+            this.resource = this.placeholder;
+            this.wikiname = "";
+        },
+        gotoWiki(){
+            if(this.wikiname !== undefined && this.wikiname != ""){
+                openLink("https://wiki.melvoridle.com/w/" + this.wikiname);
+            }
+        }
+    }
 }
