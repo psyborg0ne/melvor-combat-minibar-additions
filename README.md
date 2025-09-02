@@ -1,6 +1,11 @@
 ### Mod.io Stats
 <!-- MODIO:START -->
-_Last updated: never
+
+| 💾 Downloads | 👤 Subscribers | 👍 Positive | 👎 Negative | % Positive | Rating |
+|------------|-------------|------------|------------|------------|--------|
+| 568 | 180 | 4 | 0 | 100 | Positive |
+
+_Last updated: 2025-09-02 08:01 UTC_
 <!-- MODIO:END -->
 
 ### Melvor Sound FX
